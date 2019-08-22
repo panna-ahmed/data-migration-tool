@@ -13,6 +13,8 @@ namespace DataMigrationTool
     public partial class MainForm : Form
     {
         List<Column> selectedColumns = new List<Column>();
+        List<Column> primaryColumns = new List<Column>();
+
         string connStr = string.Empty;
 
         public MainForm()
@@ -91,6 +93,7 @@ namespace DataMigrationTool
         private void GetSelectColumns()
         {
             selectedColumns.Clear();
+            primaryColumns.Clear();
             foreach (DataGridViewRow row in dataGridViewColumnSelection.Rows)
             {
                 DataGridViewCheckBoxCell chk = (DataGridViewCheckBoxCell)row.Cells[0];
@@ -98,12 +101,25 @@ namespace DataMigrationTool
 
                 if ((bool)chk.Value)
                 {
-                    var colname = ((DataGridViewTextBoxCell)row.Cells[2]).Value.ToString();
-                    var coltype = ((DataGridViewTextBoxCell)row.Cells[4]).Value.ToString();
-                    var collength = ((DataGridViewTextBoxCell)row.Cells[5]).Value.ToString();
-                    var colcollate = ((DataGridViewTextBoxCell)row.Cells[6]).Value.ToString();
+                    var colname = ((DataGridViewTextBoxCell)row.Cells[3]).Value.ToString();
+                    var coltype = ((DataGridViewTextBoxCell)row.Cells[5]).Value.ToString();
+                    var collength = ((DataGridViewTextBoxCell)row.Cells[6]).Value.ToString();
+                    var colcollate = ((DataGridViewTextBoxCell)row.Cells[7]).Value.ToString();
 
                     selectedColumns.Add(new Column { Name = colname, SQLType = coltype, Length = collength, Collate = colcollate });
+                }
+
+                DataGridViewCheckBoxCell chkP = (DataGridViewCheckBoxCell)row.Cells[1];
+                chkP.Value = (chkP.Value == null ? false : (bool)chkP.Value);
+
+                if ((bool)chkP.Value)
+                {
+                    var colname = ((DataGridViewTextBoxCell)row.Cells[3]).Value.ToString();
+                    var coltype = ((DataGridViewTextBoxCell)row.Cells[5]).Value.ToString();
+                    var collength = ((DataGridViewTextBoxCell)row.Cells[6]).Value.ToString();
+                    var colcollate = ((DataGridViewTextBoxCell)row.Cells[7]).Value.ToString();
+
+                    primaryColumns.Add(new Column { Name = colname, SQLType = coltype, Length = collength, Collate = colcollate });
                 }
             }
         }
@@ -138,10 +154,23 @@ namespace DataMigrationTool
                         var fileStream = openFileDialog.OpenFile();
 
                         GetSelectColumns();
-                        var sourceTable = "dbo.[#" + comboBoxTables.SelectedValue.ToString() + "]";
-                        var targetTable = "dbo.[" + comboBoxTables.SelectedValue.ToString() + "]";
 
-                        var tempTableStatement = "CREATE TABLE "+ sourceTable + "(" + Helper.GetCreateStatement(selectedColumns) + ");";
+                        if (selectedColumns.Count == 0)
+                        {
+                            MessageBox.Show("No Columns selected.");
+                            return;
+                        }
+
+                        if (primaryColumns.Count == 0)
+                        {
+                            MessageBox.Show("No Primary Columns selected.");
+                            return;
+                        }
+
+                        var sourceTable = new Table { Name = comboBoxTables.SelectedValue.ToString() };
+                        var targetTable = new Table { Name = comboBoxTables.SelectedValue.ToString(), Target = true};
+
+                        var tempTableStatement = "CREATE TABLE "+ sourceTable.FullName + "(" + Helper.GetCreateStatement(selectedColumns) + ");";
                         using (SqlConnection con = new SqlConnection(connStr))
                         {
                             con.Open();
@@ -150,10 +179,16 @@ namespace DataMigrationTool
 
                             var sqlBulk = new SqlBulkCopy(con);
                             List<dynamic> rows;
+                            var bad = new List<string>();
                             List<string> columns;
                             using (var reader = new StreamReader(fileStream))
                             using (var csv = new CsvReader(reader))
                             {
+                                csv.Configuration.BadDataFound = context =>
+                                {
+                                    bad.Add(context.RawRecord);
+                                };
+
                                 rows = csv.GetRecords<dynamic>().ToList();
                                 columns = csv.Context.HeaderRecord.ToList();
                             }
@@ -178,18 +213,35 @@ namespace DataMigrationTool
                                 table.Rows.Add(rowValues);
                             }
 
-                            sqlBulk.DestinationTableName = sourceTable;
+                            sqlBulk.DestinationTableName = sourceTable.FullName;
                             sqlBulk.WriteToServer(table);
 
-                            var mergeStatement = "MERGE " + targetTable + @" as t 
-                                    USING " + sourceTable + @" as s
-                                ON(s." + selectedColumns[0].SQLName +" = t."+ selectedColumns[0].SQLName +@")
+                            var mergeStatement = 
+                                "CREATE TABLE dbo.[#output" + sourceTable.Name + @"](
+                                "+ Helper.GetCreateStatement(primaryColumns) +@",
+                                CONSTRAINT[PK_"+ sourceTable.Name + @"] PRIMARY KEY CLUSTERED
+                                (
+                                   " + primaryColumns[0].SQLName + @" ASC
+                                ));
+
+                                INSERT INTO dbo.[#output" + sourceTable.Name + @"] (" + primaryColumns[0].SQLName + @")
+                                SELECT TableChanges." + primaryColumns[0].SQLName + @"
+                                FROM
+                                    (MERGE " + targetTable.FullName + @" as t 
+                                    USING " + sourceTable.FullName + @" as s
+                                ON(" + Helper.GetWhereStatement("s", "t", primaryColumns ) + @")
                                 WHEN MATCHED
                                     THEN UPDATE SET
-                                        " + Helper.GetUpdateStatement("s","t",selectedColumns) + @"
-                                WHEN NOT MATCHED BY TARGET
-                                    THEN INSERT("+ Helper.GetSelectStatement(selectedColumns) + ")" +
-                                         "VALUES(" + Helper.GetInsertStatement("s",selectedColumns) +");";
+                                        " + Helper.GetUpdateStatement("s", "t", selectedColumns);
+                            if(!checkBoxInsert.Checked)
+                                mergeStatement = mergeStatement + @" WHEN NOT MATCHED BY TARGET
+                                    THEN INSERT(" + Helper.GetSelectStatement(selectedColumns) + ")" +
+                                         "VALUES(" + Helper.GetInsertStatement("s",selectedColumns) +")";
+
+                            mergeStatement = mergeStatement + @"OUTPUT $action, s." + primaryColumns[0].SQLName + @"
+                                    ) AS TableChanges(MergeAction, "+ primaryColumns[0].SQLName + @")
+                                WHERE TableChanges.MergeAction = 'UPDATE'
+                                ;";
 
                             using (SqlCommand command = new SqlCommand(mergeStatement, con))
                                 command.ExecuteNonQuery();
@@ -202,6 +254,14 @@ namespace DataMigrationTool
             catch (Exception ex)
             {
                 labelErrors.Text = ex.Message;
+            }
+        }
+
+        private void textBoxTableFilter_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                buttonTableFilter_Click(null, null);
             }
         }
     }

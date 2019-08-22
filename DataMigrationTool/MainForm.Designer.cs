@@ -47,7 +47,9 @@
             this.buttonExport = new System.Windows.Forms.Button();
             this.buttonImport = new System.Windows.Forms.Button();
             this.labelErrors = new System.Windows.Forms.Label();
+            this.checkBoxInsert = new System.Windows.Forms.CheckBox();
             this.RowSelect = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Primary = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.TABLE_SCHEMA = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cOLUMNNAMEDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.iSNULLABLEDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -108,7 +110,7 @@
             this.comboBoxTables.Location = new System.Drawing.Point(133, 49);
             this.comboBoxTables.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxTables.Name = "comboBoxTables";
-            this.comboBoxTables.Size = new System.Drawing.Size(452, 24);
+            this.comboBoxTables.Size = new System.Drawing.Size(518, 24);
             this.comboBoxTables.TabIndex = 2;
             this.comboBoxTables.ValueMember = "tables.name";
             this.comboBoxTables.SelectedIndexChanged += new System.EventHandler(this.comboBoxTables_SelectedIndexChanged);
@@ -138,14 +140,15 @@
             // 
             this.textBoxTableFilter.Location = new System.Drawing.Point(301, 16);
             this.textBoxTableFilter.Name = "textBoxTableFilter";
-            this.textBoxTableFilter.Size = new System.Drawing.Size(130, 22);
+            this.textBoxTableFilter.Size = new System.Drawing.Size(197, 22);
             this.textBoxTableFilter.TabIndex = 4;
+            this.textBoxTableFilter.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxTableFilter_KeyDown);
             // 
             // buttonTableFilter
             // 
-            this.buttonTableFilter.Location = new System.Drawing.Point(437, 14);
+            this.buttonTableFilter.Location = new System.Drawing.Point(504, 13);
             this.buttonTableFilter.Name = "buttonTableFilter";
-            this.buttonTableFilter.Size = new System.Drawing.Size(147, 25);
+            this.buttonTableFilter.Size = new System.Drawing.Size(147, 27);
             this.buttonTableFilter.TabIndex = 5;
             this.buttonTableFilter.Text = "Filter";
             this.buttonTableFilter.UseVisualStyleBackColor = true;
@@ -159,6 +162,7 @@
             this.dataGridViewColumnSelection.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewColumnSelection.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.RowSelect,
+            this.Primary,
             this.TABLE_SCHEMA,
             this.cOLUMNNAMEDataGridViewTextBoxColumn,
             this.iSNULLABLEDataGridViewTextBoxColumn,
@@ -216,12 +220,27 @@
             this.labelErrors.Size = new System.Drawing.Size(970, 49);
             this.labelErrors.TabIndex = 9;
             // 
+            // checkBoxInsert
+            // 
+            this.checkBoxInsert.AutoSize = true;
+            this.checkBoxInsert.Location = new System.Drawing.Point(720, 49);
+            this.checkBoxInsert.Name = "checkBoxInsert";
+            this.checkBoxInsert.Size = new System.Drawing.Size(142, 21);
+            this.checkBoxInsert.TabIndex = 10;
+            this.checkBoxInsert.Text = "Insert if not match";
+            this.checkBoxInsert.UseVisualStyleBackColor = true;
+            // 
             // RowSelect
             // 
             this.RowSelect.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
             this.RowSelect.HeaderText = "Select";
             this.RowSelect.Name = "RowSelect";
             this.RowSelect.Width = 53;
+            // 
+            // Primary
+            // 
+            this.Primary.HeaderText = "Primary";
+            this.Primary.Name = "Primary";
             // 
             // TABLE_SCHEMA
             // 
@@ -282,6 +301,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1267, 725);
+            this.Controls.Add(this.checkBoxInsert);
             this.Controls.Add(this.labelErrors);
             this.Controls.Add(this.buttonImport);
             this.Controls.Add(this.buttonExport);
@@ -326,7 +346,9 @@
         private System.Windows.Forms.Button buttonExport;
         private System.Windows.Forms.Button buttonImport;
         private System.Windows.Forms.Label labelErrors;
+        private System.Windows.Forms.CheckBox checkBoxInsert;
         private System.Windows.Forms.DataGridViewCheckBoxColumn RowSelect;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn Primary;
         private System.Windows.Forms.DataGridViewTextBoxColumn TABLE_SCHEMA;
         private System.Windows.Forms.DataGridViewTextBoxColumn cOLUMNNAMEDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn iSNULLABLEDataGridViewTextBoxColumn;
