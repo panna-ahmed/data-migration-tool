@@ -232,7 +232,7 @@ namespace DataMigrationTool
                                 ON(" + Helper.GetWhereStatement("s", "t", primaryColumns ) + @")
                                 WHEN MATCHED
                                     THEN UPDATE SET
-                                        " + Helper.GetUpdateStatement("s", "t", selectedColumns);
+                                        " + Helper.GetUpdateStatement("s", "t", selectedColumns, primaryColumns);
                             if(!checkBoxInsert.Checked)
                                 mergeStatement = mergeStatement + @" WHEN NOT MATCHED BY TARGET
                                     THEN INSERT(" + Helper.GetSelectStatement(selectedColumns) + ")" +
@@ -245,6 +245,25 @@ namespace DataMigrationTool
 
                             using (SqlCommand command = new SqlCommand(mergeStatement, con))
                                 command.ExecuteNonQuery();
+
+                            var outputStatement = "Select * from dbo.[#output" + sourceTable.Name + @"]";
+                            using (SqlCommand command = new SqlCommand(outputStatement, con)) {
+                                StreamWriter tw = File.AppendText(@"C:\dev\output.txt");
+                                var reader = command.ExecuteReader();
+                                tw.WriteLine(primaryColumns[0].SQLName);
+                                while (reader.Read())
+                                {
+                                    for(int i = 0; i < reader.FieldCount; i++)
+                                        tw.Write(reader[i].ToString());
+
+                                    tw.WriteLine();
+                                }
+                                tw.WriteLine(DateTime.Now);
+                                tw.WriteLine("---------------------------------");
+                                tw.Close();
+
+                                reader.Close();
+                            }
                         }
                     }
                 }

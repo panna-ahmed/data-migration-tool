@@ -6,13 +6,14 @@ namespace DataMigrationTool
 {
     public class Helper
     {
-        public static string GetUpdateStatement(string source, string target, List<Column> columns)
+        public static string GetUpdateStatement(string source, string target, List<Column> columns, List<Column> primaryColumns)
         {
             var statement = string.Empty;
 
             foreach(var col in columns)
             {
-                statement = statement + target + "." + col.SQLName + "=" + source + "." + col.SQLName + ",";
+                if(!primaryColumns.Any(p => p.Name == col.Name))
+                    statement = statement + target + "." + col.SQLName + "=" + source + "." + col.SQLName + ",";
             }
 
             return statement.TrimEnd(',');
