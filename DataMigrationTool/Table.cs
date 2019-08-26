@@ -21,5 +21,13 @@
             }
         }
 
+        public string OutputName
+        {
+            get
+            {
+                return Schema + ".[#output" + Name + @"]";
+            }
+        }
+
     }
 }

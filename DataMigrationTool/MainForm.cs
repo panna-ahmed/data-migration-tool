@@ -201,7 +201,7 @@ namespace DataMigrationTool
 
                             foreach (var c in columns)
                             {
-                                table.Columns.Add(c);
+                                table.Columns.Add(c, typeof(string));
                                 sqlBulk.ColumnMappings.Add(c, c);
                             }
 
@@ -217,14 +217,14 @@ namespace DataMigrationTool
                             sqlBulk.WriteToServer(table);
 
                             var mergeStatement = 
-                                "CREATE TABLE dbo.[#output" + sourceTable.Name + @"](
+                                "CREATE TABLE " + sourceTable.OutputName + @"(
                                 "+ Helper.GetCreateStatement(primaryColumns) +@",
                                 CONSTRAINT[PK_"+ sourceTable.Name + @"] PRIMARY KEY CLUSTERED
                                 (
                                    " + primaryColumns[0].SQLName + @" ASC
                                 ));
 
-                                INSERT INTO dbo.[#output" + sourceTable.Name + @"] (" + primaryColumns[0].SQLName + @")
+                                INSERT INTO " + sourceTable.OutputName + @" (" + primaryColumns[0].SQLName + @")
                                 SELECT TableChanges." + primaryColumns[0].SQLName + @"
                                 FROM
                                     (MERGE " + targetTable.FullName + @" as t 
@@ -238,25 +238,27 @@ namespace DataMigrationTool
                                     THEN INSERT(" + Helper.GetSelectStatement(selectedColumns) + ")" +
                                          "VALUES(" + Helper.GetInsertStatement("s",selectedColumns) +")";
 
-                            mergeStatement = mergeStatement + @"OUTPUT $action, s." + primaryColumns[0].SQLName + @"
+                            mergeStatement = mergeStatement + @" OUTPUT $action, s." + primaryColumns[0].SQLName + @"
                                     ) AS TableChanges(MergeAction, "+ primaryColumns[0].SQLName + @")
-                                WHERE TableChanges.MergeAction = 'UPDATE'
-                                ;";
+                                WHERE TableChanges.MergeAction = 'UPDATE';";
 
                             using (SqlCommand command = new SqlCommand(mergeStatement, con))
                                 command.ExecuteNonQuery();
 
-                            var outputStatement = "Select * from dbo.[#output" + sourceTable.Name + @"]";
+                            var outputStatement = "select s.* from " + sourceTable.FullName + 
+                                " as s where not exists (select 1 from " + sourceTable.OutputName + @" as o" + 
+                                " where o." + primaryColumns[0].SQLName + " = s." + primaryColumns[0].SQLName + ")";
                             using (SqlCommand command = new SqlCommand(outputStatement, con)) {
                                 StreamWriter tw = File.AppendText(@"C:\dev\output.txt");
                                 var reader = command.ExecuteReader();
-                                tw.WriteLine(primaryColumns[0].SQLName);
+                                tw.WriteLine(string.Join(",",Enumerable.Range(0, reader.FieldCount).Select(reader.GetName).ToArray()));
                                 while (reader.Read())
                                 {
+                                    var row = string.Empty;
                                     for(int i = 0; i < reader.FieldCount; i++)
-                                        tw.Write(reader[i].ToString());
-
-                                    tw.WriteLine();
+                                        row = row + reader[i].ToString() + ",";
+                                    
+                                    tw.WriteLine(row.TrimEnd(','));
                                 }
                                 tw.WriteLine(DateTime.Now);
                                 tw.WriteLine("---------------------------------");

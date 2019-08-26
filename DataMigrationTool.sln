@@ -22,4 +22,13 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1D019E99-6560-474B-BA3E-6848298976BA}
 	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 2
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://orion-informatics.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = DataMigrationTool\\DataMigrationTool.csproj
+		SccProjectName1 = DataMigrationTool
+		SccLocalPath1 = DataMigrationTool
+	EndGlobalSection
 EndGlobal
