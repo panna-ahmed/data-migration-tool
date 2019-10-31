@@ -41,6 +41,15 @@
             this.textBoxTableFilter = new System.Windows.Forms.TextBox();
             this.buttonTableFilter = new System.Windows.Forms.Button();
             this.dataGridViewColumnSelection = new System.Windows.Forms.DataGridView();
+            this.RowSelect = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Primary = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Validation = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.TABLE_SCHEMA = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cOLUMNNAMEDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.iSNULLABLEDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dATATYPEDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cHARACTERMAXIMUMLENGTHDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.COLLATION_NAME = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cOLUMNSBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.navDataset1 = new DataMigrationTool.NavDataset();
             this.cOLUMNSTableAdapter = new DataMigrationTool.NavDatasetTableAdapters.COLUMNSTableAdapter();
@@ -48,14 +57,15 @@
             this.buttonImport = new System.Windows.Forms.Button();
             this.labelErrors = new System.Windows.Forms.Label();
             this.checkBoxInsert = new System.Windows.Forms.CheckBox();
-            this.RowSelect = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Primary = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.TABLE_SCHEMA = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cOLUMNNAMEDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.iSNULLABLEDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dATATYPEDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cHARACTERMAXIMUMLENGTHDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.COLLATION_NAME = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label3 = new System.Windows.Forms.Label();
+            this.labelSelectedColumns = new System.Windows.Forms.Label();
+            this.BrowserButton = new System.Windows.Forms.Button();
+            this.ChooseFileLabel = new System.Windows.Forms.Label();
+            this.NoSeriesComboBox = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.labelNoSeries = new System.Windows.Forms.Label();
+            this.btnSelectAll = new System.Windows.Forms.Button();
+            this.btnUnselectAll = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.companyBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NavDataset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewColumnSelection)).BeginInit();
@@ -110,7 +120,7 @@
             this.comboBoxTables.Location = new System.Drawing.Point(133, 49);
             this.comboBoxTables.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxTables.Name = "comboBoxTables";
-            this.comboBoxTables.Size = new System.Drawing.Size(518, 24);
+            this.comboBoxTables.Size = new System.Drawing.Size(519, 24);
             this.comboBoxTables.TabIndex = 2;
             this.comboBoxTables.ValueMember = "tables.name";
             this.comboBoxTables.SelectedIndexChanged += new System.EventHandler(this.comboBoxTables_SelectedIndexChanged);
@@ -139,6 +149,7 @@
             // textBoxTableFilter
             // 
             this.textBoxTableFilter.Location = new System.Drawing.Point(301, 16);
+            this.textBoxTableFilter.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxTableFilter.Name = "textBoxTableFilter";
             this.textBoxTableFilter.Size = new System.Drawing.Size(197, 22);
             this.textBoxTableFilter.TabIndex = 4;
@@ -146,7 +157,8 @@
             // 
             // buttonTableFilter
             // 
-            this.buttonTableFilter.Location = new System.Drawing.Point(504, 13);
+            this.buttonTableFilter.Location = new System.Drawing.Point(507, 15);
+            this.buttonTableFilter.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonTableFilter.Name = "buttonTableFilter";
             this.buttonTableFilter.Size = new System.Drawing.Size(147, 27);
             this.buttonTableFilter.TabIndex = 5;
@@ -158,11 +170,14 @@
             // 
             this.dataGridViewColumnSelection.AllowUserToAddRows = false;
             this.dataGridViewColumnSelection.AllowUserToDeleteRows = false;
+            this.dataGridViewColumnSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridViewColumnSelection.AutoGenerateColumns = false;
             this.dataGridViewColumnSelection.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewColumnSelection.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.RowSelect,
             this.Primary,
+            this.Validation,
             this.TABLE_SCHEMA,
             this.cOLUMNNAMEDataGridViewTextBoxColumn,
             this.iSNULLABLEDataGridViewTextBoxColumn,
@@ -170,65 +185,15 @@
             this.cHARACTERMAXIMUMLENGTHDataGridViewTextBoxColumn,
             this.COLLATION_NAME});
             this.dataGridViewColumnSelection.DataSource = this.cOLUMNSBindingSource;
-            this.dataGridViewColumnSelection.Location = new System.Drawing.Point(19, 80);
+            this.dataGridViewColumnSelection.Location = new System.Drawing.Point(20, 90);
+            this.dataGridViewColumnSelection.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dataGridViewColumnSelection.Name = "dataGridViewColumnSelection";
             this.dataGridViewColumnSelection.RowTemplate.Height = 24;
             this.dataGridViewColumnSelection.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewColumnSelection.Size = new System.Drawing.Size(1236, 575);
             this.dataGridViewColumnSelection.TabIndex = 6;
+            this.dataGridViewColumnSelection.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewColumnSelection_CellMouseClick);
             this.dataGridViewColumnSelection.SelectionChanged += new System.EventHandler(this.dataGridViewColumnSelection_SelectionChanged);
-            // 
-            // cOLUMNSBindingSource
-            // 
-            this.cOLUMNSBindingSource.DataMember = "COLUMNS";
-            this.cOLUMNSBindingSource.DataSource = this.navDataset1;
-            // 
-            // navDataset1
-            // 
-            this.navDataset1.DataSetName = "NavDataset";
-            this.navDataset1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // cOLUMNSTableAdapter
-            // 
-            this.cOLUMNSTableAdapter.ClearBeforeFill = true;
-            // 
-            // buttonExport
-            // 
-            this.buttonExport.Location = new System.Drawing.Point(856, 13);
-            this.buttonExport.Name = "buttonExport";
-            this.buttonExport.Size = new System.Drawing.Size(130, 27);
-            this.buttonExport.TabIndex = 7;
-            this.buttonExport.Text = "Export";
-            this.buttonExport.UseVisualStyleBackColor = true;
-            this.buttonExport.Click += new System.EventHandler(this.buttonExport_Click);
-            // 
-            // buttonImport
-            // 
-            this.buttonImport.Location = new System.Drawing.Point(720, 13);
-            this.buttonImport.Name = "buttonImport";
-            this.buttonImport.Size = new System.Drawing.Size(130, 27);
-            this.buttonImport.TabIndex = 8;
-            this.buttonImport.Text = "Import";
-            this.buttonImport.UseVisualStyleBackColor = true;
-            this.buttonImport.Click += new System.EventHandler(this.buttonImport_Click);
-            // 
-            // labelErrors
-            // 
-            this.labelErrors.ForeColor = System.Drawing.Color.Red;
-            this.labelErrors.Location = new System.Drawing.Point(16, 667);
-            this.labelErrors.Name = "labelErrors";
-            this.labelErrors.Size = new System.Drawing.Size(970, 49);
-            this.labelErrors.TabIndex = 9;
-            // 
-            // checkBoxInsert
-            // 
-            this.checkBoxInsert.AutoSize = true;
-            this.checkBoxInsert.Location = new System.Drawing.Point(720, 49);
-            this.checkBoxInsert.Name = "checkBoxInsert";
-            this.checkBoxInsert.Size = new System.Drawing.Size(142, 21);
-            this.checkBoxInsert.TabIndex = 10;
-            this.checkBoxInsert.Text = "Insert if not match";
-            this.checkBoxInsert.UseVisualStyleBackColor = true;
             // 
             // RowSelect
             // 
@@ -241,6 +206,14 @@
             // 
             this.Primary.HeaderText = "Primary";
             this.Primary.Name = "Primary";
+            // 
+            // Validation
+            // 
+            this.Validation.HeaderText = "Validation";
+            this.Validation.Items.AddRange(new object[] {
+            "Normal",
+            "Email"});
+            this.Validation.Name = "Validation";
             // 
             // TABLE_SCHEMA
             // 
@@ -296,11 +269,167 @@
             this.COLLATION_NAME.ReadOnly = true;
             this.COLLATION_NAME.Width = 162;
             // 
+            // cOLUMNSBindingSource
+            // 
+            this.cOLUMNSBindingSource.DataMember = "COLUMNS";
+            this.cOLUMNSBindingSource.DataSource = this.navDataset1;
+            // 
+            // navDataset1
+            // 
+            this.navDataset1.DataSetName = "NavDataset";
+            this.navDataset1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // cOLUMNSTableAdapter
+            // 
+            this.cOLUMNSTableAdapter.ClearBeforeFill = true;
+            // 
+            // buttonExport
+            // 
+            this.buttonExport.Location = new System.Drawing.Point(659, 47);
+            this.buttonExport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonExport.Name = "buttonExport";
+            this.buttonExport.Size = new System.Drawing.Size(131, 27);
+            this.buttonExport.TabIndex = 7;
+            this.buttonExport.Text = "Export";
+            this.buttonExport.UseVisualStyleBackColor = true;
+            this.buttonExport.Click += new System.EventHandler(this.buttonExport_Click);
+            // 
+            // buttonImport
+            // 
+            this.buttonImport.Location = new System.Drawing.Point(659, 15);
+            this.buttonImport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonImport.Name = "buttonImport";
+            this.buttonImport.Size = new System.Drawing.Size(131, 27);
+            this.buttonImport.TabIndex = 8;
+            this.buttonImport.Text = "Import";
+            this.buttonImport.UseVisualStyleBackColor = true;
+            this.buttonImport.Click += new System.EventHandler(this.buttonImport_Click);
+            // 
+            // labelErrors
+            // 
+            this.labelErrors.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.labelErrors.ForeColor = System.Drawing.Color.Red;
+            this.labelErrors.Location = new System.Drawing.Point(0, 676);
+            this.labelErrors.Name = "labelErrors";
+            this.labelErrors.Size = new System.Drawing.Size(1646, 49);
+            this.labelErrors.TabIndex = 9;
+            // 
+            // checkBoxInsert
+            // 
+            this.checkBoxInsert.AutoSize = true;
+            this.checkBoxInsert.Location = new System.Drawing.Point(797, 49);
+            this.checkBoxInsert.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.checkBoxInsert.Name = "checkBoxInsert";
+            this.checkBoxInsert.Size = new System.Drawing.Size(96, 21);
+            this.checkBoxInsert.TabIndex = 10;
+            this.checkBoxInsert.Text = "Insert New";
+            this.checkBoxInsert.UseVisualStyleBackColor = true;
+            this.checkBoxInsert.CheckedChanged += new System.EventHandler(this.checkBoxInsert_CheckedChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(1285, 151);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(0, 17);
+            this.label3.TabIndex = 12;
+            // 
+            // labelSelectedColumns
+            // 
+            this.labelSelectedColumns.AutoSize = true;
+            this.labelSelectedColumns.Location = new System.Drawing.Point(1289, 151);
+            this.labelSelectedColumns.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelSelectedColumns.Name = "labelSelectedColumns";
+            this.labelSelectedColumns.Size = new System.Drawing.Size(0, 17);
+            this.labelSelectedColumns.TabIndex = 13;
+            // 
+            // BrowserButton
+            // 
+            this.BrowserButton.Location = new System.Drawing.Point(797, 15);
+            this.BrowserButton.Margin = new System.Windows.Forms.Padding(4);
+            this.BrowserButton.Name = "BrowserButton";
+            this.BrowserButton.Size = new System.Drawing.Size(131, 27);
+            this.BrowserButton.TabIndex = 14;
+            this.BrowserButton.Text = "Choose file";
+            this.BrowserButton.UseVisualStyleBackColor = true;
+            this.BrowserButton.Click += new System.EventHandler(this.BrowserButton_Click);
+            // 
+            // ChooseFileLabel
+            // 
+            this.ChooseFileLabel.AutoSize = true;
+            this.ChooseFileLabel.Location = new System.Drawing.Point(935, 22);
+            this.ChooseFileLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.ChooseFileLabel.Name = "ChooseFileLabel";
+            this.ChooseFileLabel.Size = new System.Drawing.Size(96, 17);
+            this.ChooseFileLabel.TabIndex = 15;
+            this.ChooseFileLabel.Text = "no file chosen";
+            // 
+            // NoSeriesComboBox
+            // 
+            this.NoSeriesComboBox.DisplayMember = "tables.name";
+            this.NoSeriesComboBox.FormattingEnabled = true;
+            this.NoSeriesComboBox.Location = new System.Drawing.Point(1288, 77);
+            this.NoSeriesComboBox.Margin = new System.Windows.Forms.Padding(4);
+            this.NoSeriesComboBox.Name = "NoSeriesComboBox";
+            this.NoSeriesComboBox.Size = new System.Drawing.Size(160, 24);
+            this.NoSeriesComboBox.TabIndex = 16;
+            this.NoSeriesComboBox.ValueMember = "tables.name";
+            this.NoSeriesComboBox.SelectedValueChanged += new System.EventHandler(this.NoSeriesComboBox_SelectedValueChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(1289, 118);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(162, 17);
+            this.label4.TabIndex = 17;
+            this.label4.Text = "Selected Column Names";
+            // 
+            // labelNoSeries
+            // 
+            this.labelNoSeries.AutoSize = true;
+            this.labelNoSeries.Location = new System.Drawing.Point(1288, 52);
+            this.labelNoSeries.Name = "labelNoSeries";
+            this.labelNoSeries.Size = new System.Drawing.Size(74, 17);
+            this.labelNoSeries.TabIndex = 18;
+            this.labelNoSeries.Text = "No. Series";
+            // 
+            // btnSelectAll
+            // 
+            this.btnSelectAll.Location = new System.Drawing.Point(1058, 47);
+            this.btnSelectAll.Name = "btnSelectAll";
+            this.btnSelectAll.Size = new System.Drawing.Size(86, 27);
+            this.btnSelectAll.TabIndex = 19;
+            this.btnSelectAll.Text = "Select All";
+            this.btnSelectAll.UseVisualStyleBackColor = true;
+            this.btnSelectAll.Click += new System.EventHandler(this.btnSelectAll_Click);
+            // 
+            // btnUnselectAll
+            // 
+            this.btnUnselectAll.Location = new System.Drawing.Point(1150, 47);
+            this.btnUnselectAll.Name = "btnUnselectAll";
+            this.btnUnselectAll.Size = new System.Drawing.Size(106, 27);
+            this.btnUnselectAll.TabIndex = 20;
+            this.btnUnselectAll.Text = "Unselect All";
+            this.btnUnselectAll.UseVisualStyleBackColor = true;
+            this.btnUnselectAll.Click += new System.EventHandler(this.btnUnselectAll_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1267, 725);
+            this.ClientSize = new System.Drawing.Size(1646, 725);
+            this.Controls.Add(this.btnUnselectAll);
+            this.Controls.Add(this.btnSelectAll);
+            this.Controls.Add(this.labelNoSeries);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.NoSeriesComboBox);
+            this.Controls.Add(this.ChooseFileLabel);
+            this.Controls.Add(this.BrowserButton);
+            this.Controls.Add(this.labelSelectedColumns);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.checkBoxInsert);
             this.Controls.Add(this.labelErrors);
             this.Controls.Add(this.buttonImport);
@@ -347,14 +476,24 @@
         private System.Windows.Forms.Button buttonImport;
         private System.Windows.Forms.Label labelErrors;
         private System.Windows.Forms.CheckBox checkBoxInsert;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label labelSelectedColumns;
         private System.Windows.Forms.DataGridViewCheckBoxColumn RowSelect;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Primary;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Validation;
         private System.Windows.Forms.DataGridViewTextBoxColumn TABLE_SCHEMA;
         private System.Windows.Forms.DataGridViewTextBoxColumn cOLUMNNAMEDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn iSNULLABLEDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn dATATYPEDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn cHARACTERMAXIMUMLENGTHDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn COLLATION_NAME;
+        private System.Windows.Forms.Button BrowserButton;
+        private System.Windows.Forms.Label ChooseFileLabel;
+        private System.Windows.Forms.ComboBox NoSeriesComboBox;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label labelNoSeries;
+        private System.Windows.Forms.Button btnSelectAll;
+        private System.Windows.Forms.Button btnUnselectAll;
     }
 }
 

@@ -76,6 +76,7 @@
     <Compile Include="NAVDataSet.cs">
       <DependentUpon>NAVDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="NoSeries.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NAVDataSet.Designer.cs">
@@ -120,7 +121,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
